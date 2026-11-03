@@ -22,7 +22,14 @@ public interface Function<I, O> {
      * @param <T> the input (and output) type of the function
      * @return A new {@code Function} that implements the identity function with the provided type
      */
-    static <T> Function<T, T> identity() {
+
+    /*
+    Si implementi il metodo `identity()`, che deve restituire la funzione identià
+    (ossia, che restituisce l'input passato in ingresso senza modifica alcuna)
+    tramite una classe anonima.
+    devi farci un return di una Function che restituisce gli stessi parametri
+    */
+    static <T> Function<T, T> identity() {  //una funziona che prende in ingresso un T e restituisce un T
         return null;
     }
 
