@@ -29,8 +29,11 @@ public interface Function<I, O> {
     tramite una classe anonima.
     devi farci un return di una Function che restituisce gli stessi parametri
     */
-    static <T> Function<T, T> identity() {  //una funziona che prende in ingresso un T e restituisce un T
-        return null;
+    static <T> Function<T, T> identity() {  //una funziona che prende in ingresso un T e restituisce un T --> sotto forma di classe anonima, new Function<T,T> { ... }
+        return new Function<T,T>() {
+                public T call(final T input) {
+                    return input;
+            }
+        };
     }
-
 }

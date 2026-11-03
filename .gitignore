@@ -1,2 +1,4 @@
-*/.gradle/
+.gradle/
+bin/
 build/
+71-custom-iterable/bin/main/it/unibo/inner/TestIterablePlain.class
