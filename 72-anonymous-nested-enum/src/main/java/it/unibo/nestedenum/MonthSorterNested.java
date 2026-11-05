@@ -22,24 +22,20 @@ public final class MonthSorterNested implements MonthSorter {
         public int getDays(){
             return this.days;
         }
-        //metodo data una stringa di testo, restituisce il `Month` che meglio la rappresenta
-        Month fromString(final String name){    //dato un name che si avvicina ad un nome di un mese, cercare di ritornare quel mese
-            Objects.requireNonNull(name);
-            //lavorare con stringhe
-            //primo rendo tutto maiuscolo
 
+        static Month fromString(final String name) {    
+            Objects.requireNonNull(name);
             final String upper = name.toUpperCase(Locale.ROOT);
-            //ora ho il mese in maiuscolo e posso confrontare con gli enum
             Month found = null;
             for (final Month search : values()) {
-                if(search.name().startsWith(upper)) {
+                if(search.name().startsWith(upper)) {      
                     if(found != null) {
                         throw new IllegalArgumentException("incorrect input month: " + name);
                     }
                     found = search;
                 }
             }
-            if(found == null){
+            if(found == null) {
                 throw new IllegalArgumentException("no month corresponding with: "+ name);
             }
             return found;
@@ -61,17 +57,26 @@ public final class MonthSorterNested implements MonthSorter {
     * 11  Novembre   30
     * 12  Dicembre   31
     */
-
-    //creazione due classi innestate `SortByMonthOrder` e `SortByDate`
-
+    private static final class SortByMonthOrder implements Comparator<String> {
+        @Override 
+        public int compare(final String a, final String b){
+            return Month.fromString(a).compareTo(Month.fromString(b));  
+        }
+    }
+    private static final class SortByDate implements Comparator<String> {
+        @Override 
+        public int compare(final String a, final String b){
+            return Integer.compare(Month.fromString(a).getDays(), Month.fromString(b).getDays());   
+        }
+    }   
 
     @Override
     public Comparator<String> sortByDays() {
-        return null;
+        return new SortByDate();
     }
 
     @Override
     public Comparator<String> sortByOrder() {
-        return null;
+        return new SortByMonthOrder();
     }
 }

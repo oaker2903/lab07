@@ -5,7 +5,6 @@ import it.unibo.functional.api.Function;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,8 +30,8 @@ public final class Transformers {
      * @return A "flattened" list of the produced elements
      */
     public static <I, O> List<O> flattenTransform(
-        final Iterable<? extends I> base,   //gli passo lista di input
-        final Function<I, ? extends Collection<? extends O>> transformer//indica il modo di transformare quegli elementi
+        final Iterable<? extends I> base,
+        final Function<I, ? extends Collection<? extends O>> transformer
     ) {
         final var result = new ArrayList<O>();
         for (final I input : Objects.requireNonNull(base, "The base iterable cannot be null")) {
@@ -42,27 +41,20 @@ public final class Transformers {
     }
 
     /**
-     * A function that applies a transformation to each element of an {@link Iterable},
-     * returning a list of these transformed elements.  
-     * For instance, {@code [1, 2, 3, 4, 5]} could use {@code transform} to produce a list of squares by passing
-     * a function that computes the square of the input, thus obtaining {@code [1, 4, 9, 16, 25]}.
-     * <b>NOTE:</b> this function is a special flattenTransform whose function always return a list with a single
-     * element
-     *
-     * @param base the elements on which to operate
-     * @param transformer the {@link Function} to apply to each element.
-     * @param <I> input elements type
-     * @param <O> output elements type
-     * @return A transformed list where each input element is replaced with the produced elements
-     */
-    //in questo metodo prendo sempre una base e un trasformer, e ci modifico tutti gli elementi di base e ritorno, senza selezionarne alcuni con determinate proprietà
-    public static <I, O> List<O> transform(final Iterable<I> base, final Function<I, O> transformer) {      //I sarà base e O sarà base modificata, senza flatternarla
-       
-        //gli devo consegnare tutti gli el di base modificati, senza escluderne nessuno
-        //come riuso flattenTransform?
-        //è un flattenTransform ma senza flatten
-
-        
+    * A function that applies a transformation to each element of an {@link Iterable},
+    * returning a list of these transformed elements.  
+    * For instance, {@code [1, 2, 3, 4, 5]} could use {@code transform} to produce a list of squares by passing
+    * a function that computes the square of the input, thus obtaining {@code [1, 4, 9, 16, 25]}.
+    * <b>NOTE:</b> this function is a special flattenTransform whose function always return a list with a single
+    * element
+    *
+    * @param base the elements on which to operate
+    * @param transformer the {@link Function} to apply to each element.
+    * @param <I> input elements type
+    * @param <O> output elements type
+    * @return A transformed list where each input element is replaced with the produced elements
+    */
+    public static <I, O> List<O> transform(final Iterable<I> base, final Function<I, O> transformer) {
         return flattenTransform(base, input -> Collections.singletonList(transformer.call(input)));
     }
 
@@ -78,8 +70,8 @@ public final class Transformers {
      * @param <I> type of the collection elements
      * @return A flattened list with the elements of each collection in the input
      */
-    public static <I> List<? extends I> flatten(final Iterable<? extends Collection<? extends I>> base) {   //la uso poi in flattenTransform
-        return flattenTransform(base, collection -> collection);    //uso metodo identità creato prima
+    public static <I> List<? extends I> flatten(final Iterable<? extends Collection<? extends I>> base) {
+        return flattenTransform(base, collection -> collection);
     }
 
     /**
@@ -95,12 +87,11 @@ public final class Transformers {
      * @param <I> elements type
      * @return A list containing only the elements that passed the test
      */
-    public static <I> List<I> select(final Iterable<I> base, final Function<I, Boolean> test) { //uso poi in flattenTransform
-        //itero e per ogni controllo se passa il test, se si aggiungo alla lista da ritornare
+    public static <I> List<I> select(final Iterable<I> base, final Function<I, Boolean> test) {
         final var result = new ArrayList<I>();
         for (final I input : Objects.requireNonNull(base, "The base iterable cannot be null")) {
-            if(test.call(input)) {  //se il test call su input passa (= true) 
-                result.add(input);  //lo vado a inserire in result
+            if(test.call(input)) {
+                result.add(input);
             }
         }
         return result;
@@ -118,8 +109,7 @@ public final class Transformers {
      * @param <I> elements type
      * @return A list containing only the elements that passed the test
      */
-    public static <I> List<I> reject(final Iterable<I> base, final Function<I, Boolean> test) { 
-        //dovrei richiamare select ma con boolean al contrario
+    public static <I> List<I> reject(final Iterable<I> base, final Function<I, Boolean> test) {
         return select(base, input -> !test.call(input));
     }
 }
